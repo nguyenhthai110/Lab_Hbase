@@ -16,7 +16,7 @@ namespace HBaseTest
     class Program
     {
         private static Hbase.Thrift.Hbase.Client _hbase;
-        static byte[] table_name = Encoding.UTF8.GetBytes("Report_Machines");
+        static byte[] table_name = Encoding.UTF8.GetBytes("Staff");
         static readonly byte[] ID = Encoding.UTF8.GetBytes("Id");
         static readonly byte[] NAME = Encoding.UTF8.GetBytes("Name");
         static int i = 0;
@@ -24,7 +24,7 @@ namespace HBaseTest
         {
             int port = 9090;
 
-            string host = args.Length == 1 ? args[0] : "10.1.11.103";
+            string host = args.Length == 1 ? args[0] : "192.168.1.48";
 
             var ip = IPAddress.Parse(host);
             var transport = new TBufferedClientTransport(new TSocketClientTransport(ip, port));
@@ -38,9 +38,9 @@ namespace HBaseTest
                 var names = await _hbase.getTableNamesAsync(CancellationToken.None);
                 names.ForEach(msg => Console.WriteLine(Encoding.UTF8.GetString(msg)));
 
-                await CreateTable();
+                //await CreateTable();
                 //await Insert();
-                //await Get();
+                await Get();
 
                 transport.Close();
             }
@@ -58,12 +58,21 @@ namespace HBaseTest
             {
                 foreach (var rowResult in entry)
                 {
-                    Console.Write("{0} => ", new Guid(rowResult.Row));
-                    var res = rowResult.Columns.Select(c => BitConverter.ToInt32(c.Value.Value, 0));
-                    foreach (var cell in res)
+                    if (rowResult.Columns.Count > 0)
                     {
-                        Console.WriteLine("{0}", cell);
+                        foreach (var item in rowResult.Columns)
+                        {
+                            Console.WriteLine($"{Encoding.UTF8.GetString(item.Value.Value)}");
+                        }
                     }
+
+
+                    //Console.Write("{0} => ", new Guid(rowResult.Row));
+                    //var res = rowResult.Columns.Select(c => BitConverter.ToInt32(c.Value.Value, 0));
+                    //foreach (var cell in res)
+                    //{
+                    //    Console.WriteLine("{0}", cell);
+                    //}
                 }
             }
         }
