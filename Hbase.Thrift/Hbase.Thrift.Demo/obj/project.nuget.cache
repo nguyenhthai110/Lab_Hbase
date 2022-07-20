@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DjeVVpAG3gbhWdVBWxobAuuKYSJGA4JqkjPOV0cjfc4TEdO7JV9APIEcDNpkSVK94fJQeNSwnVxwM3P6Utzrvg==",
+  "dgSpecHash": "of7DYAg9uh3PeTie6hluZHEKqvpAU1sU40XGWef5tXmaKF7rdHkRoMnOimNQX4Gwb6Nt0qoFrawL1GWTLu/k6Q==",
   "success": true,
-  "projectFilePath": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Thrift\\Hbase.Thrift.Demo\\Hbase.Thrift.Demo.csproj",
+  "projectFilePath": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Thrift\\Hbase.Thrift.Demo\\Hbase.Thrift.Demo.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\thainh2.BA\\.nuget\\packages\\apachethrift\\0.12.0.1\\apachethrift.0.12.0.1.nupkg.sha512",
     "C:\\Users\\thainh2.BA\\.nuget\\packages\\microsoft.extensions.configuration\\6.0.0\\microsoft.extensions.configuration.6.0.0.nupkg.sha512",

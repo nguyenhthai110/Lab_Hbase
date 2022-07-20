@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "t9m7aiqgDy98lD2iCsK8gDs3sKHMELgubwAEd9NdpTdgeYJG+uHP9Gcp7AUfFmlTb305Pv7PQBqgrmglIf76Qg==",
+  "dgSpecHash": "6NW5+wia5fFNl3Ouo5To1zTFNl++KMPqMcLBOM397dvdj2nwJ0g4BuM2j8FwmrEgMMuV8WI1iJso5r0WoMjrBw==",
   "success": true,
-  "projectFilePath": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\HBase.Thrift.Core.csproj",
+  "projectFilePath": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\HBase.Thrift.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\thainh2.BA\\.nuget\\packages\\apachethrift\\0.12.0.1\\apachethrift.0.12.0.1.nupkg.sha512",
     "C:\\Users\\thainh2.BA\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",

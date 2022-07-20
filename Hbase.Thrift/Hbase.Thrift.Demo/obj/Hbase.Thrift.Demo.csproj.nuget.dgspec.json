@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Thrift\\Hbase.Thrift.Demo\\Hbase.Thrift.Demo.csproj": {}
+    "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Thrift\\Hbase.Thrift.Demo\\Hbase.Thrift.Demo.csproj": {}
   },
   "projects": {
-    "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\HBase.Thrift.Core.csproj": {
+    "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\HBase.Thrift.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\HBase.Thrift.Core.csproj",
+        "projectUniqueName": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\HBase.Thrift.Core.csproj",
         "projectName": "HBase.Thrift.Core",
-        "projectPath": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\HBase.Thrift.Core.csproj",
+        "projectPath": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\HBase.Thrift.Core.csproj",
         "packagesPath": "C:\\Users\\thainh2.BA\\.nuget\\packages\\",
-        "outputPath": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\obj\\",
+        "outputPath": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\thainh2.BA\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -65,14 +65,14 @@
         }
       }
     },
-    "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Thrift\\Hbase.Thrift.Demo\\Hbase.Thrift.Demo.csproj": {
+    "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Thrift\\Hbase.Thrift.Demo\\Hbase.Thrift.Demo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Thrift\\Hbase.Thrift.Demo\\Hbase.Thrift.Demo.csproj",
+        "projectUniqueName": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Thrift\\Hbase.Thrift.Demo\\Hbase.Thrift.Demo.csproj",
         "projectName": "Hbase.Thrift.Demo",
-        "projectPath": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Thrift\\Hbase.Thrift.Demo\\Hbase.Thrift.Demo.csproj",
+        "projectPath": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Thrift\\Hbase.Thrift.Demo\\Hbase.Thrift.Demo.csproj",
         "packagesPath": "C:\\Users\\thainh2.BA\\.nuget\\packages\\",
-        "outputPath": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Thrift\\Hbase.Thrift.Demo\\obj\\",
+        "outputPath": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Thrift\\Hbase.Thrift.Demo\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\thainh2.BA\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -89,8 +89,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\HBase.Thrift.Core.csproj": {
-                "projectPath": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\HBase.Thrift.Core.csproj"
+              "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\HBase.Thrift.Core.csproj": {
+                "projectPath": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\HBase.Thrift.Core.csproj"
               }
             }
           }

@@ -20,17 +20,12 @@ namespace Hbase.Thrift.Demo
         private readonly HbaseOptions _hbaseOption;
         private readonly IDatabase _database;
         private static Hbase.Client _hbase;
-        static byte[] table_name = Encoding.UTF8.GetBytes("emp");
-        static readonly byte[] ID = Encoding.UTF8.GetBytes("personal data");
-        static readonly byte[] NAME = Encoding.UTF8.GetBytes("professinal data");
-
         public Worker(ILogger<Worker> logger, HbaseOptions hbaseOption, IDatabase database)
         {
             _logger = logger;
             _hbaseOption = hbaseOption;
             _database = database;
         }
-
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
@@ -45,14 +40,14 @@ namespace Hbase.Thrift.Demo
 
                 List<string> lstXN = new List<string>();
                 lstXN = _database.LayDanhSachXN(new List<string>(), 2022, 0, 10000, "GPS6");
-                //var names = await _hbase.getTableNamesAsync(CancellationToken.None);
-                //names.ForEach(msg => Console.WriteLine(Encoding.UTF8.GetString(msg)));
+                var names = await _hbase.getTableNamesAsync(CancellationToken.None);
+                names.ForEach(msg => _logger.LogInformation(Encoding.UTF8.GetString(msg)));
 
                 //await CreateTable();
-                await Insert();
-                //await Get();
+                //await Insert();
+                await Get();
 
-                
+
 
 
                 transport.Close();
@@ -68,44 +63,47 @@ namespace Hbase.Thrift.Demo
             throw new NotImplementedException();
         }
 
-        private static async Task Get()
+        private async Task Get()
         {
-            var scanner = await _hbase.scannerOpenAsync(table_name, Guid.Empty.ToByteArray(),
-                                             new List<byte[]>() { ID, NAME }, new Dictionary<byte[], byte[]>(), CancellationToken.None);
-            for (var entry = (await _hbase.scannerGetAsync(scanner, CancellationToken.None)); entry.Count > 0; entry = await _hbase.scannerGetAsync(scanner, CancellationToken.None))
+            try
             {
-                foreach (var rowResult in entry)
+                var scanner = await _hbase.scannerOpenAsync(Encoding.UTF8.GetBytes(_hbaseOption.TableName), Guid.Empty.ToByteArray(),
+                                            new List<byte[]>() { Encoding.UTF8.GetBytes(_hbaseOption.ColFamily), Encoding.UTF8.GetBytes(_hbaseOption.ColFamily1) }, new Dictionary<byte[], byte[]>(), CancellationToken.None);
+                for (var entry = (await _hbase.scannerGetAsync(scanner, CancellationToken.None)); entry.Count > 0; entry = await _hbase.scannerGetAsync(scanner, CancellationToken.None))
                 {
-                    if (rowResult.Columns.Count > 0)
+                    foreach (var rowResult in entry)
                     {
-                        foreach (var item in rowResult.Columns)
+                        if (rowResult.Columns.Count > 0)
                         {
-                            Console.WriteLine($"{Encoding.UTF8.GetString(item.Key)}:{Encoding.UTF8.GetString(item.Value.Value)}");
+                            foreach (var item in rowResult.Columns)
+                            {
+                                Console.WriteLine($"{Encoding.UTF8.GetString(item.Key)}:{Encoding.UTF8.GetString(item.Value.Value)}");
+                            }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
 
+                _logger.LogError($"{ex}");
+            }
         }
 
-        private static async Task Insert()
+        private async Task Insert()
         {
             try
             {
-
-               
-
-
-                await _hbase.mutateRowsAsync(table_name, new List<BatchMutation>()
+                await _hbase.mutateRowsAsync(Encoding.UTF8.GetBytes(_hbaseOption.TableName), new List<BatchMutation>()
                 {
                     new BatchMutation()
                     {
-                        Row = Encoding.UTF8.GetBytes("8"),
+                        Row = Encoding.UTF8.GetBytes("9"),
                         Mutations = new List<Mutation> {
-                            new Mutation{Column = Encoding.UTF8.GetBytes("personal data:Id"), IsDelete = false, Value = Encoding.UTF8.GetBytes("2023") },
-                            new Mutation{Column = Encoding.UTF8.GetBytes("personal data:Name"), IsDelete = false, Value = Encoding.UTF8.GetBytes("Nguyen Thi Dao") },
-                            new Mutation{Column = Encoding.UTF8.GetBytes("professinal data:Designation"), IsDelete = false, Value = Encoding.UTF8.GetBytes("IT") },
-                            new Mutation{Column = Encoding.UTF8.GetBytes("professinal data:Salary"), IsDelete = false, Value = Encoding.UTF8.GetBytes("40000") },
+                            new Mutation{Column = Encoding.UTF8.GetBytes($"{_hbaseOption.ColFamily}:Id"), IsDelete = false, Value = Encoding.UTF8.GetBytes("2024") },
+                            new Mutation{Column = Encoding.UTF8.GetBytes($"{_hbaseOption.ColFamily}:Name"), IsDelete = false, Value = Encoding.UTF8.GetBytes("Nguyen Thi Le") },
+                            new Mutation{Column = Encoding.UTF8.GetBytes($"{_hbaseOption.ColFamily1}:Designation"), IsDelete = false, Value = Encoding.UTF8.GetBytes("IT") },
+                            new Mutation{Column = Encoding.UTF8.GetBytes($"{_hbaseOption.ColFamily1}:Salary"), IsDelete = false, Value = Encoding.UTF8.GetBytes("40000") },
                         }
                     }
 
@@ -113,24 +111,32 @@ namespace Hbase.Thrift.Demo
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ex}");
+                _logger.LogError($"{ex}");
             }
         }
 
-        private static async Task CreateTable()
+        private async Task CreateTable()
         {
-            //await _hbase.disableTableAsync(table_name, CancellationToken.None);
-            //await _hbase.deleteTableAsync(table_name, CancellationToken.None);
+            try
+            {
+                //await _hbase.disableTableAsync(table_name, CancellationToken.None);
+                //await _hbase.deleteTableAsync(table_name, CancellationToken.None);
 
-            await _hbase.createTableAsync(
-                table_name,
-                new List<ColumnDescriptor>()
-                    {
-                        new ColumnDescriptor {Name = ID, InMemory = true},
-                        new ColumnDescriptor {Name = NAME, InMemory = true}
-                    },
-                CancellationToken.None
-                );
+                await _hbase.createTableAsync(
+                    Encoding.UTF8.GetBytes(_hbaseOption.TableName),
+                    new List<ColumnDescriptor>()
+                        {
+                        new ColumnDescriptor {Name =  Encoding.UTF8.GetBytes(_hbaseOption.ColFamily), InMemory = true},
+                        new ColumnDescriptor {Name =  Encoding.UTF8.GetBytes(_hbaseOption.ColFamily1), InMemory = true},
+                        },
+                    CancellationToken.None
+                    );
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError($"{ex}");
+            }
         }
     }
 }

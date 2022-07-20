@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\HBase.Thrift.Core.csproj": {}
+    "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\HBase.Thrift.Core.csproj": {}
   },
   "projects": {
-    "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\HBase.Thrift.Core.csproj": {
+    "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\HBase.Thrift.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\HBase.Thrift.Core.csproj",
+        "projectUniqueName": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\HBase.Thrift.Core.csproj",
         "projectName": "HBase.Thrift.Core",
-        "projectPath": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\HBase.Thrift.Core.csproj",
+        "projectPath": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\HBase.Thrift.Core.csproj",
         "packagesPath": "C:\\Users\\thainh2.BA\\.nuget\\packages\\",
-        "outputPath": "D:\\WORKSPACE\\Lab\\HBASE\\Hbase.Core\\obj\\",
+        "outputPath": "D:\\WORKSPACE\\Lab\\Lab_Hbase\\Hbase.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\thainh2.BA\\AppData\\Roaming\\NuGet\\NuGet.Config",
