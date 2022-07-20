@@ -16,16 +16,13 @@ namespace HBaseTest
     class Program
     {
         private static Hbase.Thrift.Hbase.Client _hbase;
-        static byte[] table_name = Encoding.UTF8.GetBytes("Staff");
-        static readonly byte[] ID = Encoding.UTF8.GetBytes("Id");
-        static readonly byte[] NAME = Encoding.UTF8.GetBytes("Name");
-        static int i = 0;
+        static byte[] table_name = Encoding.UTF8.GetBytes("emp");
+        static readonly byte[] ID = Encoding.UTF8.GetBytes("personal data");
+        static readonly byte[] NAME = Encoding.UTF8.GetBytes("professinal data");
+        static readonly string host = "192.168.1.48";
+        static readonly int port = 9090;
         static async Task Main(string[] args)
         {
-            int port = 9090;
-
-            string host = args.Length == 1 ? args[0] : "192.168.1.48";
-
             var ip = IPAddress.Parse(host);
             var transport = new TBufferedClientTransport(new TSocketClientTransport(ip, port));
             var proto = new TBinaryProtocol(transport);
@@ -39,9 +36,10 @@ namespace HBaseTest
                 names.ForEach(msg => Console.WriteLine(Encoding.UTF8.GetString(msg)));
 
                 //await CreateTable();
-                //await Insert();
-                await Get();
+                await Insert();
+                //await Get();
 
+                Console.ReadLine();
                 transport.Close();
             }
             catch (Exception e)
@@ -53,7 +51,7 @@ namespace HBaseTest
         private static async Task Get()
         {
             var scanner = await _hbase.scannerOpenAsync(table_name, Guid.Empty.ToByteArray(),
-                                             new List<byte[]>() { ID }, new Dictionary<byte[], byte[]>(), CancellationToken.None);
+                                             new List<byte[]>() { ID, NAME }, new Dictionary<byte[], byte[]>(), CancellationToken.None);
             for (var entry = (await _hbase.scannerGetAsync(scanner, CancellationToken.None)); entry.Count > 0; entry = await _hbase.scannerGetAsync(scanner, CancellationToken.None))
             {
                 foreach (var rowResult in entry)
@@ -62,46 +60,43 @@ namespace HBaseTest
                     {
                         foreach (var item in rowResult.Columns)
                         {
-                            Console.WriteLine($"{Encoding.UTF8.GetString(item.Value.Value)}");
+                            Console.WriteLine($"{Encoding.UTF8.GetString(item.Key)}:{Encoding.UTF8.GetString(item.Value.Value)}");
                         }
                     }
-
-
-                    //Console.Write("{0} => ", new Guid(rowResult.Row));
-                    //var res = rowResult.Columns.Select(c => BitConverter.ToInt32(c.Value.Value, 0));
-                    //foreach (var cell in res)
-                    //{
-                    //    Console.WriteLine("{0}", cell);
-                    //}
                 }
             }
+
         }
 
         private static async Task Insert()
         {
-            await _hbase.mutateRowsAsync(table_name, new List<BatchMutation>()
+            try
             {
-                new BatchMutation()
+                await _hbase.mutateRowsAsync(table_name, new List<BatchMutation>()
                 {
-                    Row = Guid.NewGuid().ToByteArray(),
-                    Mutations = new List<Mutation> {
-                        new Mutation{Column = ID, IsDelete = false, Value = BitConverter.GetBytes(i++) }
+                    new BatchMutation()
+                    {
+                        Row = Encoding.UTF8.GetBytes("6"),
+                        Mutations = new List<Mutation> {
+                            new Mutation{Column = Encoding.UTF8.GetBytes("personal data:Id"), IsDelete = false, Value = Encoding.UTF8.GetBytes("2020") },
+                            new Mutation{Column = Encoding.UTF8.GetBytes("personal data:Name"), IsDelete = false, Value = Encoding.UTF8.GetBytes("Nguyen Thi Mit") },
+                            new Mutation{Column = Encoding.UTF8.GetBytes("professinal data:Designation"), IsDelete = false, Value = Encoding.UTF8.GetBytes("Testing") },
+                            new Mutation{Column = Encoding.UTF8.GetBytes("professinal data:Salary"), IsDelete = false, Value = Encoding.UTF8.GetBytes("20000") },
+                        }
                     }
-                },
-                new BatchMutation()
-                {
-                    Row = Guid.NewGuid().ToByteArray(),
-                    Mutations = new List<Mutation> {
-                        new Mutation{Column = ID, IsDelete = false, Value = BitConverter.GetBytes(i++) }
-                    }
-                }
-            }, new Dictionary<byte[], byte[]>(), CancellationToken.None);
+
+                }, new Dictionary<byte[], byte[]>(), CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex}");
+            }
         }
 
         private static async Task CreateTable()
         {
-            await _hbase.disableTableAsync(table_name, CancellationToken.None);
-            await _hbase.deleteTableAsync(table_name, CancellationToken.None);
+            //await _hbase.disableTableAsync(table_name, CancellationToken.None);
+            //await _hbase.deleteTableAsync(table_name, CancellationToken.None);
 
             await _hbase.createTableAsync(
                 table_name,
