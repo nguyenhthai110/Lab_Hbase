@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "36995c45-0993-4b68-ab09-916f7bc11ac4": {
+      "ProjectGuid": "36995c45-0993-4b68-ab09-916f7bc11ac4",
+      "DisplayName": "Hbase.Thrift.Demo",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

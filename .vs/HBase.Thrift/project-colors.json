@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "243d60d7-e112-4a62-80d5-fa36b60750ee": {
+      "ProjectGuid": "243d60d7-e112-4a62-80d5-fa36b60750ee",
+      "DisplayName": "HBase.Thrift.Core",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "ef286179-0521-4ec2-a0c9-35700dbb800d": {
+      "ProjectGuid": "ef286179-0521-4ec2-a0c9-35700dbb800d",
+      "DisplayName": "HBase.Thrift.Core.Test",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
