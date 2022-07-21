@@ -44,8 +44,8 @@ namespace Hbase.Thrift.Demo
                 names.ForEach(msg => _logger.LogInformation(Encoding.UTF8.GetString(msg)));
 
                 //await CreateTable();
-                //await Insert();
-                await Get();
+                await Insert();
+               // await Get();
 
                 transport.Close();
             }
@@ -118,20 +118,22 @@ namespace Hbase.Thrift.Demo
                 //var lstXN = _database.LayDanhSachXN(new List<string>(), 2022, 1, 10000, "GPS2");
 
                 long _count = 1;
-                List<BatchMutation> lstBat = new List<BatchMutation>();
                 BatchMutation batchMutation = null;
- 
-                // lấy dữ liệu
-                var data = _database.Report_Stops_SelectAll(13578, DateTime.Parse("2017-01-01"), DateTime.Parse("2022-07-20"), "449026,245108,245392,245394,247545,252543,260696,261605,265242,284686,295520,317432,325206,342468", 0, 0, 0, "", 1, 2147483647);
-
-                if (data.Count > 0)
+                // fake dữ liệu
+                for (int i = 0; i < 300; i++)
                 {
-                    foreach (ReportStop item in data)
+                    List<BatchMutation> lstBat = new List<BatchMutation>();
+                    // lấy dữ liệu
+                    var data = _database.Report_Stops_SelectAll(13578, DateTime.Parse("2017-01-01"), DateTime.Parse("2022-07-20"), "449026", 0, 0, 0, "", 1, 2147483647);
+
+                    if (data.Count > 0)
                     {
-                        batchMutation = new BatchMutation()
+                        foreach (ReportStop item in data)
                         {
-                            Row = Encoding.UTF8.GetBytes(_count.ToString()),
-                            Mutations = new List<Mutation>
+                            batchMutation = new BatchMutation()
+                            {
+                                Row = Encoding.UTF8.GetBytes(_count.ToString()),
+                                Mutations = new List<Mutation>
                             {
                                 new Mutation{Column = Encoding.UTF8.GetBytes($"{_hbaseOption.ColFamily}:FK_VehicleID"), IsDelete = false, Value = Encoding.UTF8.GetBytes($"{item.FK_VehicleID}")},
                                 new Mutation{Column = Encoding.UTF8.GetBytes($"{_hbaseOption.ColFamily}:StartTime"), IsDelete = false, Value = Encoding.UTF8.GetBytes($"{item.StartTime}")},
@@ -147,15 +149,17 @@ namespace Hbase.Thrift.Demo
                                 new Mutation{Column = Encoding.UTF8.GetBytes($"{_hbaseOption.ColFamily}:VehiclePlate"), IsDelete = false, Value = Encoding.UTF8.GetBytes($"{item.VehiclePlate}")},
                                 new Mutation{Column = Encoding.UTF8.GetBytes($"{_hbaseOption.ColFamily}:PrivateCode"), IsDelete = false, Value = Encoding.UTF8.GetBytes($"{item.PrivateCode}")},
                             }
-                        };
+                            };
 
-                        lstBat.Add(batchMutation);
-                        _count++;
+                            lstBat.Add(batchMutation);
+                            _count++;
+                        }
                     }
-                }
-                await _hbase.mutateRowsAsync(Encoding.UTF8.GetBytes(_hbaseOption.TableName), lstBat, new Dictionary<byte[], byte[]>(), CancellationToken.None);
+                    await _hbase.mutateRowsAsync(Encoding.UTF8.GetBytes(_hbaseOption.TableName), lstBat, new Dictionary<byte[], byte[]>(), CancellationToken.None);
+                    _logger.LogInformation("PUT DONE : {0}", _count);
 
-                _logger.LogInformation("PUT DONE");
+                }
+
             }
             catch (Exception ex)
             {
