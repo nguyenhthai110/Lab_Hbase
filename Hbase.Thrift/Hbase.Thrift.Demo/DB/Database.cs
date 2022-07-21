@@ -5,6 +5,7 @@ using System.Data;
 using Microsoft.Extensions.Logging;
 using Hbase.Thrift.Demo.Settings;
 using System.Data.SqlClient;
+using Hbase.Thrift.Demo.Entites;
 
 namespace Hbase.Thrift.Demo.DB
 {
@@ -12,15 +13,15 @@ namespace Hbase.Thrift.Demo.DB
     {
         private readonly ILogger<Database> _logger;
         private readonly DbOptions _db;
-
-        public Database(ILogger<Database> logger, DbOptions db)
+        private readonly DbCommonOptions _dbCommon;
+        public Database(ILogger<Database> logger, DbOptions db, DbCommonOptions dbCommon)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _db = db ?? throw new ArgumentNullException(nameof(db));
+            _dbCommon = dbCommon ?? throw new ArgumentNullException(nameof(dbCommon));
+
         }
-        /// <summary>
-        /// Lấy danh sách XN mới
-        /// </summary>
+
         public List<string> LayDanhSachXN(List<string> DanhSachDaCo, int year, int xnCodeMin, int xnCodeMax, string systemWeb)
         {
             List<string> listReturn = new List<string>();
@@ -29,12 +30,12 @@ namespace Hbase.Thrift.Demo.DB
             SqlCommand cmd = new SqlCommand();
             SqlDataAdapter da = new SqlDataAdapter();
             DataTable dt = new DataTable();
-            SqlConnection conn = new SqlConnection(_db.conn);
+            SqlConnection conn = new SqlConnection(_dbCommon.conn);
             try
             {
-                string store = _db.store;
+                string store = _dbCommon.store;
 
-               //store = String.Format("Company_GetDownload{0}", Config.IndexListXN);
+                //store = String.Format("Company_GetDownload{0}", Config.IndexListXN);
 
                 cmd = new SqlCommand(store, conn);
                 cmd.Parameters.Add(new SqlParameter("@StartLogfileTime", date));
@@ -78,35 +79,60 @@ namespace Hbase.Thrift.Demo.DB
 
         }
 
-
-        public Dictionary<string, string> LayDanhSachMappingXNG7()
+        public List<ReportStop> Report_Stops_SelectAll(int companyID, DateTime startDate, DateTime endDate, string vehicleID, int totalTime, int minutesMechineOn, int minuteConditionOn, string sortField, int rowStart, int rowEnd)
         {
-            Dictionary<string, string> dicRet = new Dictionary<string, string>();
+            List<ReportStop> lst = new List<ReportStop>();
 
+            DataTable dtb = new DataTable();
             SqlCommand cmd = new SqlCommand();
             SqlDataAdapter da = new SqlDataAdapter();
-            DataTable dt = new DataTable();
             SqlConnection conn = new SqlConnection(_db.conn);
             try
             {
-                cmd = new SqlCommand("Company_GetDMapping_G7", conn);
+                string store = _db.store;
+
+                cmd = new SqlCommand(store, conn);
+                cmd.Parameters.Add(new SqlParameter("@CompanyID", companyID));
+                cmd.Parameters.Add(new SqlParameter("@DateStart", startDate));
+                cmd.Parameters.Add(new SqlParameter("@DateEnd", endDate));
+                cmd.Parameters.Add(new SqlParameter("@VehicleID", vehicleID));
+                cmd.Parameters.Add(new SqlParameter("@TotalTime", totalTime));
+                cmd.Parameters.Add(new SqlParameter("@MinutesMechineOn", minutesMechineOn));
+                cmd.Parameters.Add(new SqlParameter("@MinuteConditionOn", minuteConditionOn));
+                cmd.Parameters.Add(new SqlParameter("@SortField", sortField));
+                cmd.Parameters.Add(new SqlParameter("@RowStart", rowStart));
+                cmd.Parameters.Add(new SqlParameter("@RowEnd", rowEnd));
+
                 cmd.CommandType = CommandType.StoredProcedure;
                 da.SelectCommand = cmd;
-                da.Fill(dt);
-               
-                foreach (DataRow row in dt.Rows)
-                {
-                    string oblXNCode = string.Empty;
-                    string g7XNCode = string.Empty;
-                    oblXNCode = row[0].ToString();
-                    g7XNCode = row[1].ToString();
+                da.Fill(dtb);
 
-                    if (!dicRet.ContainsKey(oblXNCode))
-                        dicRet.Add(oblXNCode, g7XNCode);
+                if (dtb.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtb.Rows)
+                    {
+                        lst.Add(new ReportStop
+                        {
+                            FK_VehicleID = int.Parse(dr["FK_VehicleID"].ToString()),
+                            StartTime = DateTime.Parse(dr["StartTime"].ToString()),
+                            TotalTimeStop = int.Parse(dr["TotalTimeStop"].ToString()),
+                            Longitude = double.Parse(dr["Longitude"].ToString()),
+                            Latitude = double.Parse(dr["Latitude"].ToString()),
+                            MinutesOfManchineOn = int.Parse(dr["MinutesOfManchineOn"].ToString()),
+                            MinutesOfAirConditioningOn = int.Parse(dr["MinutesOfAirConditioningOn"].ToString()),
+                            EndTime = DateTime.Parse(dr["EndTime"].ToString()),
+                            DriverName = dr["DriverName"].ToString(),
+                            DriverLicense = dr["DriverLicense"].ToString(),
+                            PrivateCode = dr["PrivateCode"].ToString(),
+                            VehiclePlate = dr["VehiclePlate"].ToString(),
+                            GroupName = dr["GroupName"].ToString(),
+                        });
+                    }
                 }
             }
             catch
             {
+                lst = new List<ReportStop>();
             }
             finally
             {
@@ -114,8 +140,7 @@ namespace Hbase.Thrift.Demo.DB
                 conn.Close();
             }
 
-            return dicRet;
-
+            return lst;
         }
     }
 }

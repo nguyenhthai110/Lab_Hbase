@@ -12,6 +12,5 @@ namespace Hbase.Thrift.Demo.Settings
         public int Port { get; set; }
         public string TableName { get; set; }
         public string ColFamily { get; set; }
-        public string ColFamily1 { get; set; }
     }
 }

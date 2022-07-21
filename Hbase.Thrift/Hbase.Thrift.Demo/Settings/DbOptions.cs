@@ -11,4 +11,10 @@ namespace Hbase.Thrift.Demo.Settings
         public string conn { get; set; }
         public string store { get; set; }
     }
+
+    public class DbCommonOptions
+    {
+        public string conn { get; set; }
+        public string store { get; set; }
+    }
 }

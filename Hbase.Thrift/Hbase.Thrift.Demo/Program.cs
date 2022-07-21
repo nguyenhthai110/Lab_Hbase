@@ -20,12 +20,15 @@ namespace Hbase.Thrift.Demo
                {
                    IConfiguration configuration = hostContext.Configuration;
                    var dbOption = new DbOptions();
+                   var dbCommonOption = new DbCommonOptions();
                    var hbaseOption = new HbaseOptions();
                    configuration.Bind("ConnectionStrings:SqlServer", dbOption);
+                   configuration.Bind("ConnectionStrings:SqlCommon", dbCommonOption);
                    configuration.Bind("Hbase", hbaseOption);
                    services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
                    services.AddSingleton<IDatabase, Database>();
                    services.AddSingleton(dbOption);
+                   services.AddSingleton(dbCommonOption);
                    services.AddSingleton(hbaseOption);
                    services.AddHostedService<Worker>();
                });
